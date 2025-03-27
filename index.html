@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jugos Tía Martha</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      color: #333;
+    }
+    header {
+      background-color: #8bc34a;
+      text-align: center;
+      padding: 2em 1em;
+      color: white;
+    }
+    .logo {
+      width: 180px;
+      margin-bottom: 1em;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0.2em 0;
+    }
+    .btn-wsp {
+      background-color: #25d366;
+      color: white;
+      padding: 0.7em 1.5em;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 1em;
+    }
+    main {
+      max-width: 700px;
+      margin: 2em auto;
+      padding: 1.5em;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      text-align: center;
+      margin-top: 1.5em;
+    }
+    .producto {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.8em 0;
+    }
+    .producto label {
+      flex: 1;
+    }
+    .producto input {
+      width: 60px;
+      padding: 0.3em;
+      text-align: center;
+    }
+    .total {
+      text-align: right;
+      margin: 1.2em 0;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logotipo-jugos-tia-martha.png" alt="Logotipo" class="logo" />
+    <h1>Jugos Tía Martha</h1>
+    <p>Deliciosos jugos, tacos y más para disfrutar</p>
+    <a class="btn-wsp" href="https://wa.me/13479424439" target="_blank">Contáctanos por WhatsApp</a>
+  </header>
+
+  <main>
+    <h2>Haz tu pedido</h2>
+    <form id="formularioPedido">
+      <h3>🥗 Jugos Verdes</h3>
+      <div class="producto"><label>🥒 Pepino ($1.00)</label><input type="number" id="pepino" min="0" value="0" /></div>
+      <div class="producto"><label>🍏 Apio, manzana y kiwi ($1.50)</label><input type="number" id="kiwi" min="0" value="0" /></div>
+      <div class="producto"><label>🌿 Apio, manzana y perejil ($1.50)</label><input type="number" id="perejil" min="0" value="0" /></div>
+      <div class="producto"><label>🍍 Piña y espinaca ($1.50)</label><input type="number" id="espinaca" min="0" value="0" /></div>
+
+      <h3>🍹 Jugos Naturales</h3>
+      <div class="producto"><label>🍉 Sandía ($1.00)</label><input type="number" id="sandia" min="0" value="0" /></div>
+      <div class="producto"><label>🥭 Maracuyá ($1.00)</label><input type="number" id="maracuya" min="0" value="0" /></div>
+      <div class="producto"><label>🫐 Mora ($1.00)</label><input type="number" id="mora" min="0" value="0" /></div>
+      <div class="producto"><label>🍊 Naranja ($1.00)</label><input type="number" id="naranja" min="0" value="0" /></div>
+
+      <h3>🌮 Tostadas</h3>
+      <div class="producto"><label>🧀 Tostada de queso ($1.00)</label><input type="number" id="queso" min="0" value="0" /></div>
+      <div class="producto"><label>🌯 Tostada mixta ($1.75)</label><input type="number" id="mixta" min="0" value="0" /></div>
+
+      <div class="total">
+        <strong>Total: $<span id="total">0.00</span></strong>
+      </div>
+      <button type="submit" class="btn-wsp">Enviar pedido por WhatsApp</button>
+    </form>
+  </main>
+
+  <script>
+    const productos = [
+      { id: 'pepino', nombre: 'Pepino', precio: 1 },
+      { id: 'kiwi', nombre: 'Apio, manzana y kiwi', precio: 1.5 },
+      { id: 'perejil', nombre: 'Apio, manzana y perejil', precio: 1.5 },
+      { id: 'espinaca', nombre: 'Piña y espinaca', precio: 1.5 },
+      { id: 'sandia', nombre: 'Sandía', precio: 1 },
+      { id: 'maracuya', nombre: 'Maracuyá', precio: 1 },
+      { id: 'mora', nombre: 'Mora', precio: 1 },
+      { id: 'naranja', nombre: 'Naranja', precio: 1 },
+      { id: 'queso', nombre: 'Tostada de queso', precio: 1 },
+      { id: 'mixta', nombre: 'Tostada mixta', precio: 1.75 }
+    ];
+
+    document.getElementById("formularioPedido").addEventListener("submit", function (e) {
+      e.preventDefault();
+      let mensaje = "Hola, quiero hacer el siguiente pedido:\\n\\n";
+      let total = 0;
+      let hayProductos = false;
+
+      productos.forEach(p => {
+        const cantidad = parseInt(document.getElementById(p.id).value);
+        if (cantidad > 0) {
+          mensaje += `- ${cantidad} x ${p.nombre} = $${(cantidad * p.precio).toFixed(2)}\\n`;
+          total += cantidad * p.precio;
+          hayProductos = true;
+        }
+      });
+
+      if (!hayProductos) {
+        alert("Por favor selecciona al menos un producto.");
+        return;
+      }
+
+      mensaje += `\\nTotal: $${total.toFixed(2)}`;
+      const numero = "13479424439";
+      const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    });
+
+    document.querySelectorAll("input[type='number']").forEach(input => {
+      input.addEventListener("input", () => {
+        let total = 0;
+        productos.forEach(p => {
+          const cantidad = parseInt(document.getElementById(p.id).value) || 0;
+          total += cantidad * p.precio;
+        });
+        document.getElementById("total").textContent = total.toFixed(2);
+      });
+    });
+  </script>
+</body>
+</html>
